@@ -8,14 +8,16 @@ def creat_perso(depart): #depart couple (x depart, y depart)
 p=creat_perso((0,0))
 def update_p(letter,p,m):#p position personnage et m matrice map
     if letter=="d" :
-        if p["y"]+1<=len(m):
+        if p["y"]+1<=len(m) and m[p["x"]][p["y"]+1]==0:
             p["y"]+=1       
     if letter=="q":
+        if m[p["x"]][p["y"]-1]==0:
             p["y"]-=1
     if letter=="z":
-        p["x"]-=1
+        if m[p["x"]-1][p["y"]]==0:
+            p["x"]-=1
     if letter=="s" :
-        if p["x"]+1<len(m[0]):
+        if p["x"]+1<len(m[0]) and m[p["x"]+1][p["y"]]==0:
             p["x"]+=1
     if p["x"] <0:
         p["x"]=0
@@ -39,7 +41,6 @@ def display_map_and_char (m,d,p,letter):# m matrice map, dico des murs, p positi
     L[p["x"]][p["y"]]="o"
     
 
-        
     return L
 
 def affichage(M,d,p,letter):
@@ -59,9 +60,15 @@ dico = {0:' ',1:'#'}
 
 #print(affichage(map,dico,(0,0),letter))
 
+l="q"
+print(affichage (map,dico,p,l))
+    
 while True:
+
     letter=input("on avance vers où ? ")
     print(affichage(map,dico,p,letter))
     
+    
+
 
 

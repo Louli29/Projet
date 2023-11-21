@@ -1,4 +1,4 @@
-def creat_perso(depart):
+def creat_perso(depart): #depart couple (x depart, y depart)
     d={}
     d["char"]="o"
     d["x"]=depart[0]
@@ -6,7 +6,7 @@ def creat_perso(depart):
     return d
 #print(creat_perso((0,0)))
 p=creat_perso((0,0))
-def update_p(letter,p,m):
+def update_p(letter,p,m):#p position personnage et m matrice map
     if letter=="d" :
         if p["y"]+1<=len(m):
             p["y"]+=1       
@@ -26,7 +26,7 @@ def update_p(letter,p,m):
 
 
 
-def display_map_and_char (m,d,p,letter):
+def display_map_and_char (m,d,p,letter):# m matrice map, dico des murs, p position personnage, letter le déplacement 
     L=[[None for a in range (len(m[0]))] for b in range(len(m))]
     for i in range (len(m)):
         for j in range (len(m[0])):

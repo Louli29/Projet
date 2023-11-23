@@ -36,7 +36,7 @@ def display_map_and_char (m,d,p,letter):# m matrice map, dico des murs, p positi
                 if m[i][j]==k:
                     L[i][j]=d[k]
 
-    p=update_p(letter,p,m)
+    
    
     L[p["x"]][p["y"]]="o"
     
@@ -66,6 +66,7 @@ print(affichage (map,dico,p,l))
 while True:
 
     letter=input("on avance vers où ? ")
+    p=update_p(letter,p,map)
     print(affichage(map,dico,p,letter))
     
     

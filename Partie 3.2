@@ -29,15 +29,15 @@ def update_p(letter,p,m):#p dico position personnage et m matrice map
 
 import random
 def create_object (nb_objects,m):
-    object=set()
+    objects=set()
     i=0
     while i < (nb_objects):
         x=random.randint(0,len(m))
         y=random.randint(0,len(m[0]))
         if m[x][y]!=1:
-            object.add((x,y))
+            objects.add((x,y))
             i+=1
-    return object # renvoie un ensemble de couple
+    return objects # renvoie un ensemble de couple
             
     
 
@@ -73,15 +73,15 @@ map = [[0,0,0,1,1],
 
 dico = {0:' ',1:'#'}
 
-perso=create_perso((0,0))
+p=create_perso((0,0))
     
 lettre="q"
 
-o=create_object(3,map)
+objects=create_object(3,map)
 
-print(affichage (map,dico,perso,lettre,o))
+print(affichage (map,dico,p,lettre,objects))
     
 while True:
 
     lettre=input("on avance vers où ? ")
-    print(affichage(map,dico,perso,lettre,o))
+    print(affichage(map,dico,p,lettre,objects))

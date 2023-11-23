@@ -28,7 +28,7 @@ def update_p(letter,p,m):#p position personnage et m matrice map
 
 
 
-def display_map_and_char (m,d,p,letter):# m matrice map, dico des murs, p position personnage, letter le déplacement 
+def display_map_and_char (m,d,p):# m matrice map, dico des murs, p position personnage
     L=[[None for a in range (len(m[0]))] for b in range(len(m))]
     for i in range (len(m)):
         for j in range (len(m[0])):
@@ -43,8 +43,8 @@ def display_map_and_char (m,d,p,letter):# m matrice map, dico des murs, p positi
 
     return L
 
-def affichage(M,d,p,letter):
-            m=display_map_and_char(M,d,p,letter)
+def affichage(M,d,p):
+            m=display_map_and_char(M,d,p)
             for a in range(len(m)):
                 for b in range (len (m[0])):
                     print (m[a][b],end="")
@@ -61,13 +61,13 @@ dico = {0:' ',1:'#'}
 #print(affichage(map,dico,(0,0),letter))
 
 l="q"
-print(affichage (map,dico,p,l))
+print(affichage (map,dico,p))
     
 while True:
 
     letter=input("on avance vers où ? ")
     p=update_p(letter,p,map)
-    print(affichage(map,dico,p,letter))
+    print(affichage(map,dico,p))
     
     
 

@@ -34,15 +34,16 @@ def create_object (nb_objects,m):
     while i < (nb_objects):
         x=random.randint(0,len(m))
         y=random.randint(0,len(m[0]))
-        if m[x][y]!=1:
+        if m[x][y]==0:
             objects.add((x,y))
             i+=1
     return objects # renvoie un ensemble de couple
             
-    
+
+     
 
 
-def display_map_char_and_objects (m,d,p,letter,objects):# m matrice map, dico des murs, p dico position personnage, l le déplacement 
+def display_map_char_and_objects (m,d,p,objects):# m matrice map, dico des murs, p dico position personnage 
     L=[[None for a in range (len(m[0]))] for b in range(len(m))]
     for i in range (len(m)):
         for j in range (len(m[0])):
@@ -53,19 +54,19 @@ def display_map_char_and_objects (m,d,p,letter,objects):# m matrice map, dico de
     for a in objects:
         L[a[0]][a[1]]="."
 
-    p=update_p(letter,p,m)
     L[p["x"]][p["y"]]="o"
     return L
 
 
-def affichage(M,d,p,letter,objects): # permet d'afficher correctement la map avec les bons retour à la ligne
-    m=display_map_char_and_objects(M,d,p,letter,objects)
+def affichage(M,d,p,objects): # permet d'afficher correctement la map avec les bons retour à la ligne
+    m=display_map_char_and_objects(M,d,p,objects)
     for a in range(len(m)):
         for b in range (len (m[0])):
             print (m[a][b],end="")
         print(end="\n")
     return""
                 
+
 map = [[0,0,0,1,1],
        [0,0,0,0,1],
        [1,1,0,0,0],
@@ -73,15 +74,22 @@ map = [[0,0,0,1,1],
 
 dico = {0:' ',1:'#'}
 
-p=create_perso((0,0))
+perso=create_perso((0,0))
     
 lettre="q"
 
-objects=create_object(3,map)
+obj=create_object(3,map)
 
-print(affichage (map,dico,p,lettre,objects))
+print(affichage (map,dico,perso,obj))
     
 while True:
 
     lettre=input("on avance vers où ? ")
-    print(affichage(map,dico,p,lettre,objects))
+    perso=update_p(lettre,perso,map)
+    # je l'ai enlevé de la ligne 61 puisque dans la consigne on doit le trouver dans le while et ne pas modifier les arg de la fonction display 
+    
+    print(affichage(map,dico,perso,obj))
+    
+
+    
+    

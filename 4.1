@@ -1,0 +1,116 @@
+import random
+
+import random
+def generate_random_map (size_map,proportion_wall):
+    m=[[0 for i in range(size_map[0])]for i in range (size_map[1])]
+    nb_w=0
+    while nb_w < (proportion_wall*size_map[0]*size_map[1]):
+        a=random.randint(0,size_map[1]-1)
+        b=random.randint(0,size_map[0]-1)
+        m[a][b]=1
+        nb_w+=1
+    return m
+
+
+def create_perso(depart): #depart couple (x depart, y depart)
+    d={}
+    d["char"]="o"
+    d["x"]=depart[0]
+    d["y"]=depart[1]
+    d["score"]=0
+    return d #dictionnaire 
+
+  
+
+def update_p(letter,p,m):#p dico position personnage et m matrice map
+    if letter=="d" :
+        if p["y"]+1<=len(m) and m[p["x"]][p["y"]+1]==0:
+            p["y"]+=1       
+    if letter=="q":
+        if m[p["x"]][p["y"]-1]==0:
+            p["y"]-=1
+    if letter=="z":
+        if m[p["x"]-1][p["y"]]==0:
+            p["x"]-=1
+    if letter=="s" :
+        if p["x"]+1<len(m[0]) and m[p["x"]+1][p["y"]]==0:
+            p["x"]+=1
+    if p["x"] <0:
+        p["x"]=0
+    if p["y"]<0:
+        p["y"]=0
+        
+    return p
+
+
+def create_object (nb_objects,m):
+    objects=set()
+    i=0
+    while i < (nb_objects):
+        x=random.randint(0,len(m)-1)
+        y=random.randint(0,len(m[0])-1)
+        if m[x][y]==0:
+            objects.add((x,y))
+            i+=1
+    return objects # renvoie un ensemble de couple
+            
+ 
+def update_objects (p,objects):
+    if (p["x"],p["y"]) in objects:
+            objects.discard((p["x"],p["y"]))
+            p["score"]+=1
+    return objects
+     
+
+
+def display_map_char_and_objects (m,d,p,objects):# m matrice map, dico des murs, p dico position personnage 
+    L=[[None for a in range (len(m[0]))] for b in range(len(m))]
+    for i in range (len(m)):
+        for j in range (len(m[0])):
+            for k in d:
+                if m[i][j]==k:
+                    L[i][j]=d[k]
+                    
+    for a in objects:
+        L[a[0]][a[1]]="."
+
+    L[p["x"]][p["y"]]="o"
+    
+    
+    return L
+
+
+def affichage(M,d,p,objects): # permet d'afficher correctement la map avec les bons retour à la ligne
+    m=display_map_char_and_objects(M,d,p,objects)
+    for a in range(len(m)):
+        for b in range (len (m[0])):
+            print (m[a][b],end="")
+        print(end="\n")
+    
+    print(p["score"]) 
+    return""
+                
+
+
+dico = {0:' ',1:'#'}
+
+p=create_perso((0,0))
+    
+lettre="q"
+
+map=generate_random_map ((6,7),0.3)
+
+objects=create_object(3,map)
+
+print(affichage (map,dico,p,objects))
+    
+while True:
+
+    lettre=input("on avance vers où ? ")
+    p=update_p(lettre,p,map) 
+    objects=update_objects(p,objects)
+    print(affichage(map,dico,p,objects))
+    
+
+    
+    

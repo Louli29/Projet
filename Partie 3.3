@@ -3,6 +3,7 @@ def create_perso(depart): #depart couple (x depart, y depart)
     d["char"]="o"
     d["x"]=depart[0]
     d["y"]=depart[1]
+    d["score"]=0
     return d #dictionnaire 
 
   
@@ -32,8 +33,8 @@ def create_object (nb_objects,m):
     objects=set()
     i=0
     while i < (nb_objects):
-        x=random.randint(0,len(m[0]))
-        y=random.randint(0,len(m))
+        x=random.randint(0,len(m)-1)
+        y=random.randint(0,len(m[0])-1)
         if m[x][y]==0:
             objects.add((x,y))
             i+=1
@@ -41,10 +42,10 @@ def create_object (nb_objects,m):
             
  
 def update_objects (p,objects):
-    for a in objects:
-        if p["x"]==a[0] and p["y"]==a[1]:
-            objects.discard(a)
-    return objects
+    if (p["x"],p["y"]) in objects:
+            objects.discard((p["x"],p["y"]))
+            p["score"]+=1
+    return objects, p
      
 
 
@@ -60,6 +61,8 @@ def display_map_char_and_objects (m,d,p,objects):# m matrice map, dico des murs,
         L[a[0]][a[1]]="."
 
     L[p["x"]][p["y"]]="o"
+    
+    
     return L
 
 
@@ -69,6 +72,8 @@ def affichage(M,d,p,objects): # permet d'afficher correctement la map avec les b
         for b in range (len (m[0])):
             print (m[a][b],end="")
         print(end="\n")
+    
+    print(p["score"]) 
     return""
                 
 
@@ -79,20 +84,20 @@ map = [[0,0,0,1,1],
 
 dico = {0:' ',1:'#'}
 
-perso=create_perso((0,0))
+p=create_perso((0,0))
     
 lettre="q"
 
-obj=create_object(3,map)
+objects=create_object(3,map)
 
-print(affichage (map,dico,perso,obj))
+print(affichage (map,dico,p,objects))
     
 while True:
 
     lettre=input("on avance vers où ? ")
-    perso=update_p(lettre,perso,map) 
-    obj=update_objects(perso,obj)
-    print(affichage(map,dico,perso,obj))
+    p=update_p(lettre,p,map) 
+    objects=update_objects(p,objects)
+    print(affichage(map,dico,p,objects))
     
 
     

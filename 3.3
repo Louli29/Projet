@@ -1,0 +1,100 @@
+def create_perso(depart): #depart couple (x depart, y depart)
+    d={}
+    d["char"]="o"
+    d["x"]=depart[0]
+    d["y"]=depart[1]
+    return d #dictionnaire 
+
+  
+
+def update_p(letter,p,m):#p dico position personnage et m matrice map
+    if letter=="d" :
+        if p["y"]+1<=len(m) and m[p["x"]][p["y"]+1]==0:
+            p["y"]+=1       
+    if letter=="q":
+        if m[p["x"]][p["y"]-1]==0:
+            p["y"]-=1
+    if letter=="z":
+        if m[p["x"]-1][p["y"]]==0:
+            p["x"]-=1
+    if letter=="s" :
+        if p["x"]+1<len(m[0]) and m[p["x"]+1][p["y"]]==0:
+            p["x"]+=1
+    if p["x"] <0:
+        p["x"]=0
+    if p["y"]<0:
+        p["y"]=0
+        
+    return p
+
+import random
+def create_object (nb_objects,m):
+    objects=set()
+    i=0
+    while i < (nb_objects):
+        x=random.randint(0,len(m))
+        y=random.randint(0,len(m[0]))
+        if m[x][y]==0:
+            objects.add((x,y))
+            i+=1
+    return objects # renvoie un ensemble de couple
+            
+ 
+def update_objects (p,objects):
+    for a in objects:
+        if p["x"]==a[0] and p["y"]==a[1]:
+            objects.discard(a)
+    return objects
+     
+
+
+def display_map_char_and_objects (m,d,p,objects):# m matrice map, dico des murs, p dico position personnage 
+    L=[[None for a in range (len(m[0]))] for b in range(len(m))]
+    for i in range (len(m)):
+        for j in range (len(m[0])):
+            for k in d:
+                if m[i][j]==k:
+                    L[i][j]=d[k]
+                    
+    for a in objects:
+        L[a[0]][a[1]]="."
+
+    L[p["x"]][p["y"]]="o"
+    return L
+
+
+def affichage(M,d,p,objects): # permet d'afficher correctement la map avec les bons retour à la ligne
+    m=display_map_char_and_objects(M,d,p,objects)
+    for a in range(len(m)):
+        for b in range (len (m[0])):
+            print (m[a][b],end="")
+        print(end="\n")
+    return""
+                
+
+map = [[0,0,0,1,1],
+       [0,0,0,0,1],
+       [1,1,0,0,0],
+       [0,0,0,0,0]]
+
+dico = {0:' ',1:'#'}
+
+perso=create_perso((0,0))
+    
+lettre="q"
+
+obj=create_object(3,map)
+
+print(affichage (map,dico,perso,obj))
+    
+while True:
+
+    lettre=input("on avance vers où ? ")
+    perso=update_p(lettre,perso,map)
+    # je l'ai enlevé de la ligne 61 puisque dans la consigne on doit le trouver dans le while et ne pas modifier les arg de la fonction display 
+    obj=update_objects(perso,obj)
+    print(affichage(map,dico,perso,obj))
+    
+
+    
+    

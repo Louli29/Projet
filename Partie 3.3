@@ -90,8 +90,7 @@ print(affichage (map,dico,perso,obj))
 while True:
 
     lettre=input("on avance vers où ? ")
-    perso=update_p(lettre,perso,map)
-    # je l'ai enlevé de la ligne 61 puisque dans la consigne on doit le trouver dans le while et ne pas modifier les arg de la fonction display 
+    perso=update_p(lettre,perso,map) 
     obj=update_objects(perso,obj)
     print(affichage(map,dico,perso,obj))
     

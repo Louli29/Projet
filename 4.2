@@ -101,8 +101,7 @@ def display_map_char_and_objects (m,d,p,objects):# m matrice map, dico des murs,
     return L
 
 def create_new_level(p,m,obj,size_map,proportion_wall): #p le perso(dico),m la map (matrice), obj les objets, size-map (tuple), proportion(float)
-    m=generate_random_map((size_map),proportion_wall)
-    print(m)#générer la nouvelle map aléatoire 
+    m=generate_random_map((size_map),proportion_wall)#générer la nouvelle map aléatoire 
     p=create_perso(coord_entré(m)) #générer le personnage au coord d'entrée de m 
     objects=create_object(3,m) 
     d={0:" ",1:"#",2:" ",3:"X"} #je remet le dico pour pouvoir l'appeler après, jsp si c'est le mieux

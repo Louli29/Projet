@@ -14,7 +14,15 @@ def generate_random_map(size_map,proportion_wall):
         if m[a][b]==0: #pour verifier qu'aucun mur ne soit present sur l'entré ou sortie
             m[a][b]=1
         nb_w+=1
-    return {"map":m,"coords_entree":(h,g)} #pouvoir acceder aux coords d'entrer en plus de la carte
+    return m
+
+def coord_entré(m):
+    for i in range(len(m)):
+        for j in range(len(m[0])):
+            if m[i][j]==2:
+                tuple=(i,m[i][j])
+    return tuple
+                
 
 def create_perso(depart): #depart couple (x depart, y depart)
     d={}
@@ -92,8 +100,8 @@ def display_map_char_and_objects (m,d,p,objects):# m matrice map, dico des murs,
     return L
 
 def create_new_level(p,m,obj,size_map,proportion_wall): #p le perso(dico),m la map (matrice), obj les objets, size-map (tuple), proportion(float)
-    m=generate_random_map((size_map),proportion_wall)["map"] #générer la nouvelle map aléatoire (comme la fonction renvoi dico, on met ["map"] por spécifier que c'est ce truc qu'on veut
-    p=create_perso(generate_random_map (size_map,0.2)["coords_entree"]) #générer le personnage au coord d'entrée de map
+    m=generate_random_map((size_map),proportion_wall)#générer la nouvelle map aléatoire (comme la fonction renvoi dico, on met ["map"] por spécifier que c'est ce truc qu'on veut
+    p=create_perso(coord_entré(m)) #générer le personnage au coord d'entrée de map
     objects=create_object(3,m) 
     d={0:" ",1:"#",2:" ",3:"X"} #je remet le dico pour pouvoir l'appeler après, jsp si c'est le mieux
     L=display_map_char_and_objects (m,d,p,objects) #je me suis dit qu'on pouvait appeler ça pour transformer notre matrice en vrai map
@@ -117,11 +125,12 @@ def affichage(M,d,p,objects): # permet d'afficher correctement la map avec les b
 dico = {0:' ',1:'#',2:' ',3:'X'}
 
 
-p=create_perso(generate_random_map ((4,5),0.2)["coords_entree"])
+
 lettre="q"
 
 
-map=generate_random_map((4,5),0.2)["map"]
+map=generate_random_map((4,5),0.2)
+p=create_perso(coord_entré(map))
 
 objects=create_object(3,map)
 
@@ -130,13 +139,13 @@ objects=create_object(3,map)
 while True:
     
     if map[p["x"]][p["y"]]==3:
-        #ici y'a une erreur que j'ai du mal a comprendre ;-;, le but c'etait que quand on est sur le X on créer la nouvelle map
         map=(create_new_level(map,p,objects,(4,5),0.2))
-        #ici je créer la nouvelle map et je veux qu'on utilise que elle maintenant
+        p=create_perso(coord_entré(map))
         objects=update_objects(p,objects)
         lettre=input("on avance vers où ? ")
         p=update_p(lettre,p,map)
-        
+#         
+#         
     else : 
         objects=update_objects(p,objects)
         print(affichage(map,dico,p,objects))

@@ -1,5 +1,5 @@
 import random
-def generate_random_map (size_map,proportion_wall):
+def generate_random_map(size_map,proportion_wall):
     m=[[0 for i in range(size_map[0])]for i in range (size_map[1])]
     nb_w=0
     h=random.randint(0,size_map[1]-1) #pour que la position de entré et sortie soit aléatoire
@@ -14,9 +14,7 @@ def generate_random_map (size_map,proportion_wall):
         if m[a][b]==0: #pour verifier qu'aucun mur ne soit present sur l'entré ou sortie
             m[a][b]=1
         nb_w+=1
-    return m 
-
-
+    return {"map":m,"coords_entree":(h,g)} #pouvoir acceder aux coords d'entrer en plus de la carte
 
 def create_perso(depart): #depart couple (x depart, y depart)
     d={}
@@ -30,16 +28,24 @@ def create_perso(depart): #depart couple (x depart, y depart)
 
 def update_p(letter,p,m):#p dico position personnage et m matrice map
     if letter=="d" :
-        if p["y"]+1<=len(m) and m[p["x"]][p["y"]+1]==0:
-            p["y"]+=1       
+        if p["y"]+1<len(m[0]) and m[p["x"]][p["y"]+1]==0:
+            p["y"]+=1
+        elif p["y"]+1<len(m[0]) and m[p["x"]][p["y"]+1]==3: #pour pouvoir aller sur le X sans depasser la taille de m
+            p["y"]+=1
     if letter=="q":
         if m[p["x"]][p["y"]-1]==0:
+            p["y"]-=1
+        elif m[p["x"]][p["y"]-1]==3:
             p["y"]-=1
     if letter=="z":
         if m[p["x"]-1][p["y"]]==0:
             p["x"]-=1
+        elif m[p["x"]-1][p["y"]]==3:
+            p["x"]-=1
     if letter=="s" :
-        if p["x"]+1<len(m[0]) and m[p["x"]+1][p["y"]]==0:
+        if p["x"]+1<len(m) and m[p["x"]+1][p["y"]]==0:
+            p["x"]+=1
+        elif p["x"]+1<len(m) and m[p["x"]+1][p["y"]]==3:
             p["x"]+=1
     if p["x"] <0:
         p["x"]=0
@@ -85,6 +91,16 @@ def display_map_char_and_objects (m,d,p,objects):# m matrice map, dico des murs,
     
     return L
 
+def create_new_level(p,m,obj,size_map,proportion_wall): #p le perso(dico),m la map (matrice), obj les objets, size-map (tuple), proportion(float)
+    m=generate_random_map((size_map),proportion_wall)["map"] #générer la nouvelle map aléatoire (comme la fonction renvoi dico, on met ["map"] por spécifier que c'est ce truc qu'on veut
+    p=create_perso(generate_random_map (size_map,0.2)["coords_entree"]) #générer le personnage au coord d'entrée de map
+    objects=create_object(3,m) 
+    d={0:" ",1:"#",2:" ",3:"X"} #je remet le dico pour pouvoir l'appeler après, jsp si c'est le mieux
+    L=display_map_char_and_objects (m,d,p,objects) #je me suis dit qu'on pouvait appeler ça pour transformer notre matrice en vrai map
+    L=affichage(m,d,p,objects) #affichage simple
+    return L #je retourne la map L
+
+
 
 def affichage(M,d,p,objects): # permet d'afficher correctement la map avec les bons retour à la ligne
     m=display_map_char_and_objects(M,d,p,objects)
@@ -100,22 +116,35 @@ def affichage(M,d,p,objects): # permet d'afficher correctement la map avec les b
 
 dico = {0:' ',1:'#',2:' ',3:'X'}
 
-p=create_perso((0,0))
-    
+
+p=create_perso(generate_random_map ((4,5),0.2)["coords_entree"])
 lettre="q"
 
-map=generate_random_map ((6,7),0.2)
+
+map=generate_random_map((4,5),0.2)["map"]
 
 objects=create_object(3,map)
 
-print(affichage (map,dico,p,objects))
+#print(affichage (map,dico,p,objects)) 
     
 while True:
-
-    lettre=input("on avance vers où ? ")
-    p=update_p(lettre,p,map) 
-    objects=update_objects(p,objects)
-    print(affichage(map,dico,p,objects))
+    
+    if map[p["x"]][p["y"]]==3:
+        #ici y'a une erreur que j'ai du mal a comprendre ;-;, le but c'etait que quand on est sur le X on créer la nouvelle map
+        map=(create_new_level(map,p,objects,(4,5),0.2))
+        #ici je créer la nouvelle map et je veux qu'on utilise que elle maintenant
+        objects=update_objects(p,objects)
+        lettre=input("on avance vers où ? ")
+        p=update_p(lettre,p,map)
+        
+    else : 
+        objects=update_objects(p,objects)
+        print(affichage(map,dico,p,objects))
+        lettre=input("on avance vers où ? ")
+        p=update_p(lettre,p,map)
+    
+    
+    
     
 
     

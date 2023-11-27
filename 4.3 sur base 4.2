@@ -7,7 +7,9 @@ def generate_random_map(size_map,proportion_wall):
     k=random.randint(0,size_map[0]-1)
     l=random.randint(0,size_map[0]-1)
     m[h][g]=2
+    
     m[k][l]=3
+    coord_perso=(h,g)
     while nb_w < (proportion_wall*size_map[0]*size_map[1]):
         a=random.randint(0,size_map[1]-1)
         b=random.randint(0,size_map[0]-1)
@@ -17,11 +19,12 @@ def generate_random_map(size_map,proportion_wall):
     return m
 
 def coord_entré(m): #matrice m 
-    tuple=()
+    tuple=(0,0)
     for i in range(len(m)):
-        for j in range(len(m[0])): #ici je cherche dans tt la matrice la coord de l'entré et je le renvoie sous forme de tuple
+        for j in range(len(m[0])): #ici je cherche dans tt la matrice la coord de l'entré et je le renvoi sous forme de tuple
             if m[i][j]==2:
-                tuple=(i,m[i][j])
+                tuple=(i,j)
+                
     return tuple
                 
 
@@ -32,8 +35,6 @@ def create_perso(depart): #depart couple (x depart, y depart)
     d["y"]=depart[1]
     d["score"]=0
     return d #dictionnaire 
-
-  
 
 def delete_all_walles(m,pos):
     a=pos[0]
@@ -116,12 +117,10 @@ def display_map_char_and_objects (m,d,p,objects):# m matrice map, dico des murs,
     
     return L
 
-def create_new_level(p,m,obj,size_map,proportion_wall): #p le perso(dico),m la map (matrice), obj les objets, size-map (tuple), proportion(float)
-    m=generate_random_map((size_map),proportion_wall)#générer la nouvelle map aléatoire 
-    p=create_perso(coord_entré(m)) #générer le personnage au coord d'entrée de m 
+def create_new_level(p,m,obj,size_map,proportion_wall):#p le perso(dico),m la map (matrice), obj les objets, size-map (tuple), proportion(float)
+    
     objects=create_object(3,m) 
     d={0:" ",1:"#",2:" ",3:"X"} #je remet le dico pour pouvoir l'appeler après, jsp si c'est le mieux
-    L=display_map_char_and_objects (m,d,p,objects) #je me suis dit qu'on pouvait appeler ça pour transformer notre matrice en vrai map
     L=affichage(m,d,p,objects) #affichage simple
     return L #je retourne la map L
 
@@ -151,22 +150,25 @@ p=create_perso(coord_entré(map))
 
 objects=create_object(3,map)
 
-#print(affichage (map,dico,p,objects)) 
+print(affichage (map,dico,p,objects)) 
     
 while True:
     
     if map[p["x"]][p["y"]]==3:
-        map=(create_new_level(map,p,objects,(4,5),0.2))
-        objects=update_objects(p,objects)
+        map=generate_random_map((4,5),0.2)#générer la nouvelle map aléatoire
+        L=create_new_level(p,map,objects,(4,5),0.2)
+        p=create_perso(coord_entré(map))
         lettre=input("on avance vers où ? ")
         p=update_p(lettre,p,map)
-#         
-#         
-    else : 
         objects=update_objects(p,objects)
         print(affichage(map,dico,p,objects))
+       
+    else :
         lettre=input("on avance vers où ? ")
         p=update_p(lettre,p,map)
+        objects=update_objects(p,objects)
+        print(affichage(map,dico,p,objects))
+        
     
     
     
@@ -174,3 +176,5 @@ while True:
 
     
     
+
+

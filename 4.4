@@ -37,16 +37,12 @@ def create_perso(depart): #depart couple (x depart, y depart)
     return d #dictionnaire 
 
 def delete_all_walles(m,pos):
-    a=pos[0]
-    b=pos[1]
-    m[a][b+1]=0
-    m[a][b-1]=0
-    m[a-1][b+1]=0
-    m[a-1][b-1]=0
-    m[a-1][b]=0
-    m[a+1][b]=0
-    m[a+1][b-1]=0
-    m[a+1][b+1]=0
+    a = pos[0]
+    b = pos[1]
+    for i in range(a-1,a+2):
+        for j in range(b-1,b+2):
+            if m[i][j]!=3:
+                m[i][j]=0
     return m
 
 def update_p(letter,p,m):#p dico position personnage et m matrice map
@@ -117,9 +113,7 @@ def display_map_char_and_objects (m,d,p,objects):# m matrice map, dico des murs,
     
     return L
 
-def create_new_level(p,m,obj,size_map,proportion_wall):#p le perso(dico),m la map (matrice), obj les objets, size-map (tuple), proportion(float)
-    
-    objects=create_object(3,m) 
+def create_new_level(p,m,obj,size_map,proportion_wall):#p le perso(dico),m la map (matrice), obj les objets, size-map (tuple), proportion(float)z
     d={0:" ",1:"#",2:" ",3:"X"} #je remet le dico pour pouvoir l'appeler après, jsp si c'est le mieux
     L=affichage(m,d,p,objects) #affichage simple
     return L #je retourne la map L
@@ -160,6 +154,7 @@ while True:
         p=create_perso(coord_entré(map))
         lettre=input("on avance vers où ? ")
         p=update_p(lettre,p,map)
+        objects=create_object(3,map)
         objects=update_objects(p,objects)
         print(affichage(map,dico,p,objects))
        

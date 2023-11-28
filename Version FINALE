@@ -7,7 +7,6 @@ def generate_random_map(size_map,proportion_wall):
     k=random.randint(0,size_map[0]-1)
     l=random.randint(0,size_map[0]-1)
     m[h][g]=2
-    
     m[k][l]=3
     coord_perso=(h,g)
     while nb_w < (proportion_wall*size_map[0]*size_map[1]):
@@ -23,10 +22,8 @@ def coord_entré(m): #matrice m
     for i in range(len(m)):
         for j in range(len(m[0])): #ici je cherche dans tt la matrice la coord de l'entré et je le renvoi sous forme de tuple
             if m[i][j]==2:
-                tuple=(i,j)
-                
-    return tuple
-                
+                tuple=(i,j)        
+    return tuple              
 
 def create_perso(depart,ancien_score): #depart couple (x depart, y depart)
     d={}
@@ -84,7 +81,6 @@ def update_p(letter,p,m):#p dico position personnage et m matrice map
         
     return p
 
-
 def create_object (nb_objects,m):
     objects=set()
     i=0
@@ -94,16 +90,13 @@ def create_object (nb_objects,m):
         if m[x][y]==0:
             objects.add((x,y))
             i+=1
-    return objects # renvoie un ensemble de couple
-            
+    return objects # renvoie un ensemble de couple           
  
 def update_objects (p,objects):
     if (p["x"],p["y"]) in objects:
             objects.discard((p["x"],p["y"]))
             p["score"]+=1
     return objects
-     
-
 
 def display_map_char_and_objects (m,d,p,objects):# m matrice map, dico des murs, p dico position personnage 
     L=[[None for a in range (len(m[0]))] for b in range(len(m))]
@@ -125,8 +118,6 @@ def create_new_level(p,map,obj,size_map,proportion_wall):#p le perso(dico),m la 
     L=display_map_char_and_objects(map,d,p,objects) #affichage simple
     return L
 
-
-
 def affichage(M,d,p,objects): # permet d'afficher correctement la map avec les bons retour à la ligne
     m=display_map_char_and_objects(M,d,p,objects)
     for a in range(len(m)):
@@ -138,43 +129,26 @@ def affichage(M,d,p,objects): # permet d'afficher correctement la map avec les b
     return""
                 
 
-
 dico = {0:' ',1:'#',2:' ',3:'X'}
-
-
 lettre="q"
-
 ancien_score=0
-map=generate_random_map((4,5),0.2)
+map=generate_random_map((4,5),0.4)
 p=create_perso(coord_entré(map),ancien_score)
-
 objects=create_object(3,map)
 niveau=1
 
 print(affichage (map,dico,p,objects))
-
-
-
-
-i=0
     
 while True:
 
-
-
-
-
     lettre=input("on avance vers où ? ")
     p=update_p(lettre,p,map)
-    
-    
-    
 
     if map[p["x"]][p["y"]]==3 and niveau%4!=0:
         niveau+=1
-        map=generate_random_map((4,5),0.2)#générer la nouvelle map aléatoire
+        map=generate_random_map((4,5),0.4)#générer la nouvelle map aléatoire
         objects=create_object(3,map)
-        L=create_new_level(p,map,objects,(4,5),0.2)
+        L=create_new_level(p,map,objects,(4,5),0.4)
         p=update_p(lettre,p,map)
         objects=update_objects(p,objects)
         print(affichage(map,dico,p,objects))
@@ -183,19 +157,15 @@ while True:
     elif map[p["x"]][p["y"]]==3 and niveau%4==0:
         niveau+=1
         map=generate_random_map((4,5),0)
-        objects=create_object(20,map)
+        objects=create_object(30,map)
         L=create_new_level(p,map,objects,(4,5),0)
         p=update_p(lettre,p,map)
         objects=update_objects(p,objects)
         print(affichage(map,dico,p,objects))
         ancien_score=p["score"]
-
-                
-
         
     else:
         objects=update_objects(p,objects)
         print(affichage(map,dico,p,objects))
     print("vous êtes au niveau ",niveau)
         
-

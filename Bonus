@@ -156,12 +156,14 @@ print(affichage (map,dico,p,objects))
 
 
 
-
+i=0
     
 while True:
-    
-    if niveau%2!=0 :
+
+
+    if niveau%3!=0 :
         piece=generate_random_map((4,5),0)
+        print(piece)
         gold=create_object(20,piece)
 
     lettre=input("on avance vers où ? ")
@@ -171,24 +173,27 @@ while True:
     
 
     if map[p["x"]][p["y"]]==3:
+        niveau+=1
         map=generate_random_map((4,5),0.2)#générer la nouvelle map aléatoire
         objects=create_object(3,map)
         L=create_new_level(p,map,objects,(4,5),0.2)
         p=update_p(lettre,p,map)
         objects=update_objects(p,objects)
-        print(affichage(map,dico,p,objects))
-        ancien_score=p["score"]
-        niveau+=1
-
+        if niveau%3!=0:
+            print(affichage(map,dico,p,objects))
+            ancien_score=p["score"]
+        
 
     else :
-        if niveau%2==0:
+        if niveau%3==0 and piece[p["x"]][p["y"]]!=3:
             gold=update_objects(p,gold)
             ancien_score=p["score"]
             print(affichage(piece,dico,p,gold))
+                
 
         
         else:
             objects=update_objects(p,objects)
             print(affichage(map,dico,p,objects))
+    print(niveau)
         
